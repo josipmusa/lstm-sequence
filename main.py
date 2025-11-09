@@ -5,9 +5,11 @@ from matplotlib import pyplot as plt
 from torch import nn
 from torch.utils.data import TensorDataset, DataLoader, random_split
 
+script_dir = Path(__file__).resolve().parent
 text_path = Path("data/shakespeare.txt")
 unknown_key = "<UNK>"
 seq_len = 50
+loss_curve_path = script_dir / "loss_curve.png"
 
 class LSTMModel(nn.Module):
     def __init__(self, num_embeddings, embedding_dim, hidden_size, num_layers, output_size):
@@ -92,8 +94,9 @@ def _plot_loss_curve(train_loss, val_loss):
     plt.legend()
     plt.grid(True, linestyle='--', alpha=0.6)
     plt.tight_layout()
-    plt.savefig("loss_curve.png")
+    plt.savefig(loss_curve_path)
     plt.close()
+    print(f"Saved loss curve to {loss_curve_path}")
 
 def _create_vocabulary(text):
     vocabulary = {"<PAD>": 0, "<UNK>": 1}
